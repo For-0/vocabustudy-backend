@@ -1,0 +1,8 @@
+node_modules/
+.replit
+.upm/
+replit.nix
+.cache/
+.config/
+db/
+quizlet-sets-cache/
