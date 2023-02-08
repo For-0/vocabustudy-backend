@@ -1,7 +1,14 @@
 import axios from "axios";
-import { ClassicLevel } from "classic-level";
+import { loadEncryptedString, saveEncryptString } from "../utils.js";
 
-const db = new ClassicLevel("./quizlet-sets-cache", { valueEncoding: "json" });
+function getCachedSet(id) {
+  return JSON.parse(loadEncryptedString("./backend/quizlet-sets-cache.store"))[id];
+}
+async function saveCachedSet(id, set) {
+  let existing = JSON.parse(loadEncryptedString("./backend/quizlet-sets-cache.store"));
+  existing[id] = set;
+  await saveEncryptString("./backend-quizlet-sets-cache.store", JSON.stringify(existing));
+}
 
 function parseQuizletMedia(mediaObject) {
   switch (mediaObject.type) {
@@ -18,14 +25,6 @@ function parseQuizletSet(setData) {
   return setData.responses[0].models.studiableItem.map(el => el.cardSides.map(el => el.media.map(parseQuizletMedia).join(" ")).join("  ")).join("\n")
 }
 
-async function getCachedSet(setId) {
-  try {
-    return await db.get(setId);
-  } catch {
-    return null;
-  }
-}
-
 async function getSet(setId) {
   let cachedSet = await getCachedSet(setId);
   if (cachedSet) return cachedSet;
@@ -35,7 +34,7 @@ async function getSet(setId) {
     "x-api-key": process.env.SCRAPINGANT_API_KEY
   }});
   let parsedSet = parseQuizletSet(res.data);
-  await db.put(setId, parsedSet);
+  await saveCachedSet(setId, parsedSet);
   return parsedSet;
 }
 console.log(await getSet("19442797"));

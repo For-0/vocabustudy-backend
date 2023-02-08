@@ -1,28 +1,27 @@
 {
-  "name": "nodejs",
+  "name": "vocabustudy-backend",
   "version": "1.0.0",
   "description": "",
   "type": "module",
   "scripts": {
-    "start": "parcel index.pug"
+    "start": "node ./index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Vocabustudy Developers",
   "license": "ISC",
   "dependencies": {
     "@types/node": "^18.0.6",
     "axios": "^1.2.2",
     "bulma": "^0.9.4",
-    "classic-level": "^1.2.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "firestore-parser": "^0.9.0",
     "jose": "^4.11.2",
-    "minisearch": "^6.0.0"
+    "minisearch": "^6.0.0",
+    "vhost": "^3.0.2"
   },
   "devDependencies": {
-    "@parcel/transformer-pug": "^2.8.2",
-    "@parcel/transformer-sass": "^2.8.2",
-    "parcel": "^2.8.2"
+    "minisearch": "^6.0.0",
+    "pug": "^3.0.2"
   }
 }
