@@ -6,6 +6,8 @@ head
     meta(name='favicon', src='favicon.ico')
     title Vocabustudy Admin Console
     link(rel='stylesheet', href='style.scss')
+    // temporary until I get sass compiling and the vocabustudy styles package set up
+    <link rel="stylesheet" href="https://vocabustudy.org/index.c7a4e6dd.css">
 nav.navbar.is-white
     .container
         .navbar-brand
@@ -17,12 +19,9 @@ nav.navbar.is-white
                 span
         #navMenu.navbar-menu
             .navbar-start
-                a.navbar-item(href='https://vocabustudy.org/')
-                    | Stable
-                a.navbar-item(href='https://nightly.vocabustudy.org/')
-                    | Nightly
-                a.navbar-item(href='https://blog.vocabustudy.org/')
-                    | Blog
+                a.navbar-item(href='https://vocabustudy.org/') Stable
+                a.navbar-item(href='https://nightly.vocabustudy.org/') Nightly
+                a.navbar-item(href='https://blog.vocabustudy.org/') Blog
 // END NAV
 .container
     .columns
@@ -31,29 +30,21 @@ nav.navbar.is-white
                 p.menu-label
                     | General
                 ul.menu-list
-                    li
-                        a.is-active Dashboard
-                    li
-                        a Sets
+                    li #[a.is-active Dashboard]
+                    li #[a Sets]
                     li
                         a Status
                             small(style="font-size: 0.5rem;") shows status of all server stuff
-                    li
-                        a Statistics
-                p.menu-label
-                    | Administration
+                    li #[a Statistics]
+                p.menu-label Administration
                 ul.menu-list
                     li
                         a Forms
                         ul
-                            li
-                                a Search Forms
-                            li
-                                a Respond to Forms
-                            li
-                                a Form Data
-                    li
-                        a Manage Users
+                            li #[a Search Forms]
+                            li #[a Respond to Forms]
+                            li #[a Form Data]
+                    li #[a Manage Users]
                     li
                         a Bugs and Features
                             small(style="font-size: 0.5rem;") This will replace the google sheet, and will directly transfer feature requests and bug reports to here if you click a button in Forms.

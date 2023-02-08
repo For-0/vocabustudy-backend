@@ -1,5 +1,8 @@
 import { jwtVerify, decodeProtectedHeader, decodeJwt, importX509 } from "jose";
 import axios from "axios";
+import * as FirestoreParser from "firestore-parser";
+import { randomBytes, createCipheriv, createDecipheriv } from "crypto";
+import { writeFile, readFileSync } from "fs";
 
 /**
 	* Compare a token date with the current date
@@ -66,10 +69,29 @@ export const userTokenDecoder = {
 	}
 };
 
+export function saveEncryptString(filename, string) {
+  return new Promise((resolve, reject) => {
+    const dataBuffer = Buffer.from(string, "utf8");
+    const iv = randomBytes(16);
+    const cipher = createCipheriv("aes-256-ctr", process.env.FILESTORE_SECRET_KEY, iv);
+    writeFile(filename, Buffer.concat([iv, cipher.update(dataBuffer), cipher.final()]).toString("hex"), err => {
+      if (err) reject(err);
+      else resolve();
+    });
+  });
+}
+
+export function loadEncryptedString(filename) {
+  const inputBuffer = Buffer.from(readFileSync(filename).toString(), "hex");
+  const iv = inputBuffer.subarray(0, 16);
+  const cipher = createDecipheriv("aes-256-ctr", process.env.FILESTORE_SECRET_KEY, iv)
+  return Buffer.concat([cipher.update(inputBuffer.subarray(16)), cipher.final()]).toString();
+}
+
 export async function getSet(setId) {
 	try {
 		let res = await axios.get(`https://firestore.googleapis.com/v1/projects/${process.env.GCP_PROJECT_ID}/databases/(default)/documents/sets/${setId}`);
-		let document = null;
+		let document = FirestoreParser(res.data);
 	} catch {
 		return null;
 	}
