@@ -1,7 +1,8 @@
-$primary: #795548;
-
-@import "./node_modules/bulma/bulma.sass";
-@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css";
+@use "@for-0/bulvar-styles/src/bulvar-styles/bulvar" as * with (
+  $custom-colors: ()
+);
+@use "@bulvar/bulma/themes/light";
+@use "@for-0/bulvar-styles/src/bulvar-styles/dark-theme";
 
 html, body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -65,7 +66,7 @@ nav.navbar {
   background-repeat: no-repeat;
   background-size: cover;
   background-size: 150%;
-  background-image: url("adminbackground.svg");
+  background-image: url("/admin-background.svg");
 }
 .hero.welcome .title, .hero.welcome .subtitle {
   color: hsl(192, 17%, 99%);
