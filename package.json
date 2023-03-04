@@ -4,15 +4,16 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "start": "node ./index.js"
+    "start": "node ./index.js",
+    "build:sass": "sass admin/src/sass:admin/public/css --no-source-map -I node_modules -s compressed",
+    "minify:css": "purgecss --css admin/public/css/styles.css --content \"admin/views/*.pug\" --output admin/public/css"
   },
   "keywords": [],
   "author": "Vocabustudy Developers",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^18.0.6",
+    "@for-0/bulvar-styles": "^1.0.1",
     "axios": "^1.2.2",
-    "bulma": "^0.9.4",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "firestore-parser": "^0.9.0",
@@ -22,6 +23,8 @@
   },
   "devDependencies": {
     "minisearch": "^6.0.0",
-    "pug": "^3.0.2"
+    "pug": "^3.0.2",
+    "purgecss": "^5.0.0",
+    "sass": "^1.58.0"
   }
 }
