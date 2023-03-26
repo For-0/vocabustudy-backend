@@ -1,0 +1,35 @@
+
+name: Deploy built admin site to CF Pages
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js 18
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'npm'
+        registry-url: https://npm.pkg.github.com/
+    - env:
+        NODE_AUTH_TOKEN: ${{ secrets.GPR_PAT }}
+      run: npm ci
+    - name: Build admin site with Parcel
+      run: npm -w admin run build
+    - name: Publish
+      uses: cloudflare/pages-action@v1
+      with:
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        projectName: vocabustudy-admin
+        directory: dist
+        gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+        workingDirectory: admin
