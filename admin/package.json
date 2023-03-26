@@ -1,0 +1,25 @@
+{
+  "name": "vocabustudy-admin",
+  "version": "1.0.0",
+  "private": "true",
+  "source": "src/index.pug",
+  "scripts": {
+    "watch": "parcel",
+    "prebuild": "mv ../.postcssrc.prod.json ../.postcssrc.json",
+    "build": "parcel build --no-source-maps",
+    "postbuild": "mv ../.postcssrc.json ../.postcssrc.prod.json",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [],
+  "author": "Vocabustudy Developers",
+  "license": "ISC",
+  "devDependencies": {
+    "@for-0/bulvar-styles": "^1.0.1",
+    "@fullhuman/postcss-purgecss": "^5.0.0",
+    "@parcel/packager-raw-url": "^2.8.3",
+    "@parcel/transformer-pug": "^2.8.3",
+    "@parcel/transformer-sass": "^2.8.3",
+    "@parcel/transformer-webmanifest": "^2.8.3",
+    "parcel": "^2.8.3"
+  }
+}

@@ -19,4 +19,5 @@ pids
 .node_repl_history
 .idea
 .vscode
-/admin/public/css/
+.parcel-cache/
+dist/

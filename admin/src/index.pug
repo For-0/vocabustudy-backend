@@ -1,0 +1,201 @@
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        meta(http-equiv='X-UA-Compatible', content='IE=edge')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        link(rel='favicon' href='images/favicon.ico')
+        link(rel="apple-touch-icon" href="images/apple-touch-icon.png")
+        title Vocabustudy Admin Console
+        link(rel='stylesheet' href='sass/styles.scss')
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css")
+        link(rel="manifest" href="app.webmanifest")
+    body
+        nav.navbar.is-white
+            .container
+                .navbar-brand
+                    a.navbar-item.brand-text(href='/') Admin Console
+                    .navbar-burger.burger(data-target='navMenu')
+                        span
+                        span
+                        span
+                #navMenu.navbar-menu
+                    .navbar-start
+                        a.navbar-item(href='https://vocabustudy.org/') Stable
+                        a.navbar-item(href='https://nightly.vocabustudy.org/') Nightly
+                        a.navbar-item(href='https://blog.vocabustudy.org/') Blog
+        .container.is-fluid
+            .columns
+                .column.is-3
+                    aside.menu.is-hidden-mobile
+                        p.menu-label
+                            | General
+                        ul.menu-list
+                            li #[a.is-active Dashboard]
+                            li #[a Sets]
+                            li
+                                a Status
+                                    small(style="font-size: 0.5rem;") shows status of all server stuff
+                            li #[a Statistics]
+                        p.menu-label Administration
+                        ul.menu-list
+                            li
+                                a Forms
+                                ul
+                                    li #[a Search Forms]
+                                    li #[a Respond to Forms]
+                                    li #[a Form Data]
+                            li #[a Manage Users]
+                            li
+                                a Bugs and Features
+                                    small(style="font-size: 0.5rem;") This will replace the google sheet, and will directly transfer feature requests and bug reports to here if you click a button in Forms.
+                        p.menu-label
+                            | Posting
+                        ul.menu-list
+                            li
+                                a Admin Posts
+                                    small(style="font-size: 0.5rem;") Send information to other admins?
+                            li
+                                a Blog Posts
+                                    small(style="font-size: 0.5rem;") vocabustudy blog posting stuff
+                            li
+                                a Announcements
+                                    small(style="font-size: 0.5rem;") remote config; adds notification banner to vocabustudy home page
+                        p.menu-label
+                            | Quick Links
+                        ul.menu-list
+                            li
+                                a(href="https://github.com/For-0/vocabustudy") Vocabustudy
+                                    span.icon.is-small.ml-2
+                                        i.fa-brands.fa-github
+                            li
+                                a(href="https://github.com/For-0") For Zero
+                                    span.icon.is-small.ml-2
+                                        i.fa-brands.fa-github
+                            li
+                                a(href="https://teams.microsoft.com/l/team/19%3apiy-nQIXOAR-UcNQjoHUPiJnMG52qiOWh0xUwJ5LS1Q1%40thread.tacv2/conversations?groupId=3ba9b62e-77d1-4ce8-8ccb-c78560b8c30b&tenantId=a3f6de14-0d97-4769-a3ae-aedf0db7add3") Teams
+                                    span.icon.is-small.ml-2
+                                        i.fa-solid.fa-message
+                            li
+                                a.has-text-danger Log Out
+                                    span.icon.is-small.ml-2
+                                        i.fa-solid.fa-sign-out
+                .column.is-9
+                    section.hero.welcome.is-small
+                        .hero-body
+                            .container
+                                h1.title
+                                    | Hello, (name of admin here)!
+                                h2.subtitle
+                                    | Today is (date here).
+                    section.info-tiles
+                        .tile.is-ancestor.has-text-centered
+                            .tile.is-parent
+                                article.tile.is-child.box
+                                    p.title 99
+                                    p.subtitle Users
+                            .tile.is-parent
+                                article.tile.is-child.box
+                                    p.title 99
+                                    p.subtitle Sets
+                            .tile.is-parent
+                                article.tile.is-child.box
+                                    p.title 9
+                                    p.subtitle Open Forms
+                            .tile.is-parent
+                                article.tile.is-child.box
+                                    p.title ✅
+                                    p.subtitle Status
+                    .columns
+                        .column.is-6
+                            .card.events-card
+                                header.card-header
+                                    p.card-header-title
+                                        | Events
+                                .card-table
+                                    .content
+                                        table.table.is-fullwidth.is-striped
+                                            tbody
+                                                tr
+                                                    td(width='5%')
+                                                        i.fa.fa-bell-o
+                                                    td Lorum ipsum dolem aire
+                                                    td.level-right
+                                                        a.button.is-small.is-primary(href='#') Action
+                                                tr
+                                                    td(width='5%')
+                                                        i.fa.fa-bell-o
+                                                    td Lorum ipsum dolem aire
+                                                    td.level-right
+                                                        a.button.is-small.is-primary(href='#') Action
+                                                tr
+                                                    td(width='5%')
+                                                        i.fa.fa-bell-o
+                                                    td Lorum ipsum dolem aire
+                                                    td.level-right
+                                                        a.button.is-small.is-primary(href='#') Action
+                                                tr
+                                                    td(width='5%')
+                                                        i.fa.fa-bell-o
+                                                    td Lorum ipsum dolem aire
+                                                    td.level-right
+                                                        a.button.is-small.is-primary(href='#') Action
+                                                tr
+                                                    td(width='5%')
+                                                        i.fa.fa-bell-o
+                                                    td Lorum ipsum dolem aire
+                                                    td.level-right
+                                                        a.button.is-small.is-primary(href='#') Action
+                                                tr
+                                                    td(width='5%')
+                                                        i.fa.fa-bell-o
+                                                    td Lorum ipsum dolem aire
+                                                    td.level-right
+                                                        a.button.is-small.is-primary(href='#') Action
+                                                tr
+                                                    td(width='5%')
+                                                        i.fa.fa-bell-o
+                                                    td Lorum ipsum dolem aire
+                                                    td.level-right
+                                                        a.button.is-small.is-primary(href='#') Action
+                                                tr
+                                                    td(width='5%')
+                                                        i.fa.fa-bell-o
+                                                    td Lorum ipsum dolem aire
+                                                    td.level-right
+                                                        a.button.is-small.is-primary(href='#') Action
+                                                tr
+                                                    td(width='5%')
+                                                        i.fa.fa-bell-o
+                                                    td Lorum ipsum dolem aire
+                                                    td.level-right
+                                                        a.button.is-small.is-primary(href='#') Action
+                                footer.card-footer
+                                    a.card-footer-item(href='#') View All
+                        .column.is-6
+                            .card
+                                header.card-header
+                                    p.card-header-title
+                                        | Inventory Search
+                                    a.card-header-icon(href='#', aria-label='more options')
+                                .card-content
+                                    .content
+                                        .control.has-icons-left.has-icons-right
+                                            input.input.is-large(type='text', placeholder='')
+                                            span.icon.is-medium.is-left
+                                                i.fa.fa-search
+                                            span.icon.is-medium.is-right
+                                                i.fa.fa-check
+                            .card
+                                header.card-header
+                                    p.card-header-title
+                                        | User Search
+                                    a.card-header-icon(href='#', aria-label='more options')
+                                .card-content
+                                    .content
+                                        .control.has-icons-left.has-icons-right
+                                            input.input.is-large(type='text', placeholder='')
+                                            span.icon.is-medium.is-left
+                                                i.fa.fa-search
+                                            span.icon.is-medium.is-right
+                                                i.fa.fa-check

@@ -1,30 +1,15 @@
 {
   "name": "vocabustudy-backend",
   "version": "1.0.0",
-  "description": "",
-  "type": "module",
-  "scripts": {
-    "start": "node ./index.js",
-    "build:sass": "sass admin/src/sass:admin/public/css --no-source-map -I node_modules -s compressed",
-    "minify:css": "purgecss --css admin/public/css/styles.css --content \"admin/views/*.pug\" --output admin/public/css"
-  },
+  "private": true,
+  "workspaces": [
+    "admin/",
+    "backend/"
+  ],
   "keywords": [],
   "author": "Vocabustudy Developers",
   "license": "ISC",
-  "dependencies": {
-    "@for-0/bulvar-styles": "^1.0.1",
-    "axios": "^1.2.2",
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "firestore-parser": "^0.9.0",
-    "jose": "^4.11.2",
-    "minisearch": "^6.0.0",
-    "vhost": "^3.0.2"
-  },
-  "devDependencies": {
-    "minisearch": "^6.0.0",
-    "pug": "^3.0.2",
-    "purgecss": "^5.0.0",
-    "sass": "^1.58.0"
+  "scripts": {
+    "clean": "rm -rf .parcel-cache && npm run -ws --if-present clean"
   }
 }
