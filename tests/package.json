@@ -1,0 +1,27 @@
+{
+    "name": "tests",
+    "private": true,
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "module",
+    "devDependencies": {
+        "@types/mocha": "^10.0.1",
+        "axios": "^1.3.5",
+        "jose": "^4.13.1",
+        "mocha": "^10.2.0"
+    },
+    "scripts": {
+        "setup-api-server": "cd ../ && npm run clean && npm -w admin run build",
+        "start-api-server": "CUSTOM_JWK=$(cat cert.pem) && cd ../ && && npm -w admin run dev -- --binding=\"CUSTOM_JWK='$CUSTOM_JWK'\"",
+        "test": "mocha authentication.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/For-0/vocabustudy-backend.git"
+    },
+    "author": "Vocabustudy Developers",
+    "bugs": {
+        "url": "https://github.com/For-0/vocabustudy-backend/issues"
+    },
+    "homepage": "https://github.com/For-0/vocabustudy-backend#readme"
+}

@@ -1,4 +1,5 @@
 import { decodeProtectedHeader, decodeJwt, jwtVerify, importX509, KeyLike } from "jose";
+import { Env } from "../function-utils/common-types";
 
 const authorizationHeaderRegexp = /^Bearer ((?:[\w-]*\.){2}[\w-]*)$/;
 
@@ -36,7 +37,11 @@ const parseJwk = (jwk: { [key: string]: string }): Promise<{ [key: string]: KeyL
         return acc;
     }, Promise.resolve({}));
 
-async function getFirebaseJwk() {
+async function getFirebaseJwk(customJwk?: string) {
+    if (customJwk) {
+        console.log("Using custom JWK");
+        return await parseJwk({ "custom-key": customJwk.replace(/'/g, "") })
+    }
     const existingCachedJwk = await caches.default.match(firebaseJwkUrl);
     if (existingCachedJwk)
         return await parseJwk(await existingCachedJwk.json());
@@ -50,12 +55,10 @@ async function getFirebaseJwk() {
 
 const unauthorized = () => new Response("Unauthorized", { status: 401 });
 
-type CustomEnv = { [key: string]: string | object }
-
-export const onRequest: PagesFunction = async ({ request, next, env }) => {
+export const onRequest: PagesFunction<Env> = async ({ request, next, env }) => {
     const matched = request.headers.get("Authorization")?.match(authorizationHeaderRegexp);
     if (!matched) return unauthorized();
-    const googlePublicKeys = await getFirebaseJwk();
+    const googlePublicKeys = await getFirebaseJwk(env.CUSTOM_JWK);
     const [, idToken] = matched;
     let header = decodeProtectedHeader(idToken);
     let claimSet = decodeJwt(idToken);
@@ -63,8 +66,8 @@ export const onRequest: PagesFunction = async ({ request, next, env }) => {
         compareTokenDate(claimSet.exp, 1) &&
         compareTokenDate(claimSet.iat, -1) &&
         compareTokenDate(claimSet.auth_time as string, -1) &&
-        claimSet.aud === (env as CustomEnv).GCP_PROJECT_ID &&
-        claimSet.iss === `https://securetoken.google.com/${(env as CustomEnv).GCP_PROJECT_ID}` &&
+        claimSet.aud === env.GCP_PROJECT_ID &&
+        claimSet.iss === `https://securetoken.google.com/${env.GCP_PROJECT_ID}` &&
         claimSet.sub
     ) {
         let keySignedWith = googlePublicKeys[header.kid];

@@ -4,7 +4,8 @@
   "private": true,
   "workspaces": [
     "admin/",
-    "backend/"
+    "backend/",
+    "tests/"
   ],
   "keywords": [],
   "author": "Vocabustudy Developers",

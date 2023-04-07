@@ -1,15 +1,8 @@
 import { getToken, makeRequest } from "../../function-utils/google-auth";
-import { Release } from "../../function-utils/common-types";
-
-interface Env {
-    VOCABUSTUDY_KV: KVNamespace;
-    SERVICE_ACCOUNT_KEY: string;
-    SERVICE_ACCOUNT_EMAIL: string;
-    GCP_PROJECT_ID: string;
-}
+import { Env, Release } from "../../function-utils/common-types";
 
 interface RequestBody {
-    type: "all" | "hosting";
+    type: "all" | "hosting" | "self";
 };
 
 const hostingMonitoringQuery = `fetch firebase_domain
@@ -158,5 +151,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
         const authToken = await getToken(["https://www.googleapis.com/auth/firebase.hosting.readonly"], env.SERVICE_ACCOUNT_KEY, env.SERVICE_ACCOUNT_EMAIL);
         const detailedStats = await getDetailedHostingStats(authToken);
         return new Response(JSON.stringify(detailedStats), { headers: { "Content-Type": "application/json" } })
+    } else if (reqBody.type === "self") {
+        return new Response(JSON.stringify({ response: "pong" }), { headers: { "Content-Type": "application/json" } });
     }
 }

@@ -4,7 +4,7 @@ const GOOGLE_TOKEN_URL = "https://www.googleapis.com/oauth2/v4/token";
 
 async function getKeyData(rawKey: string) {
   if (!rawKey) throw new Error("Private key not found");
-  return await importPKCS8(rawKey.replaceAll("\\n", "\n"), "RS256")
+  return await importPKCS8(rawKey.replace(/\\n/g, "\n"), "RS256")
 }
 
 async function getJwtToken(scopes: string[], rawKey: string, email: string) {
@@ -39,8 +39,8 @@ const commonRequestProperties = (authToken: string) => ({
     }
 });
 
-export async function makeRequest(endpointUrl: string, authToken: string, body: unknown, extraConfig: Partial<RequestInit<RequestInitCfProperties>> = {}): Promise<unknown> {
-    const fetchOptions: RequestInit<RequestInitCfProperties> = {
+export async function makeRequest(endpointUrl: string, authToken: string, body: unknown, extraConfig: Partial<RequestInit> = {}): Promise<unknown> {
+    const fetchOptions: RequestInit = {
         ...commonRequestProperties(authToken),
         ...extraConfig
     };
