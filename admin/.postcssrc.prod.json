@@ -1,0 +1,7 @@
+{
+    "plugins": {
+        "@fullhuman/postcss-purgecss": {
+            "content": ["./src/index.pug", "./src/login.pug", "./scripts/login.ts"]
+        }
+    }
+}

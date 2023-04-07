@@ -1,0 +1,20 @@
+extends layout.pug
+block variables
+    - var title = "Login";
+    - var hideSidebar = true;
+block head
+    script(src="https://accounts.google.com/gsi/client" async defer)
+    link(rel="stylesheet" href="npm:animate.css")
+block content
+    .hero-body.login-body
+        .container.has-text-centered
+            .column.is-5.is-offset-4.box
+                p.has-text-black.is-7 Shh! Welcome to the
+                h3.title.has-text-black Vocabustudy Admin Console
+                figure
+                    img.image.is-128x128.mx-auto(src='./images/icon-192.png')
+                hr
+                #google-onetap-container(style="scale: 1.4;")
+                a(href='https://vocabustudy.org').has-text-white
+                    button.button.is-rounded.is-small.is-secondary.mt-4 Go to vocabustudy.org
+    script(src="./scripts/login.ts" type="module")

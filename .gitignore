@@ -21,3 +21,4 @@ pids
 .vscode
 .parcel-cache/
 dist/
+*.vars

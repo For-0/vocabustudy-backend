@@ -2,24 +2,43 @@
   "name": "vocabustudy-admin",
   "version": "1.0.0",
   "private": "true",
-  "source": "src/index.pug",
+  "source": [
+    "src/index.pug",
+    "src/login.pug"
+  ],
   "scripts": {
-    "watch": "parcel",
-    "prebuild": "mv ../.postcssrc.prod.json ../.postcssrc.json",
-    "build": "parcel build --no-source-maps",
-    "postbuild": "mv ../.postcssrc.json ../.postcssrc.prod.json",
-    "clean": "rm -rf dist"
+    "watch": "parcel watch --cache-dir ../.parcel-cache --no-hmr",
+    "parcel": "parcel --cache-dir ../.parcel-cache",
+    "prebuild": "mv .postcssrc.prod.json .postcssrc.json",
+    "build": "parcel build --no-source-maps --cache-dir ../.parcel-cache",
+    "postbuild": "mv .postcssrc.json .postcssrc.prod.json",
+    "clean": "rm -rf dist",
+    "dev": "wrangler pages dev dist --compatibility-date=2023-03-26 --port=1234 --kv=VOCABUSTUDY_KV"
   },
   "keywords": [],
   "author": "Vocabustudy Developers",
   "license": "ISC",
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20230321.0",
     "@for-0/bulvar-styles": "^1.0.1",
     "@fullhuman/postcss-purgecss": "^5.0.0",
     "@parcel/packager-raw-url": "^2.8.3",
     "@parcel/transformer-pug": "^2.8.3",
     "@parcel/transformer-sass": "^2.8.3",
     "@parcel/transformer-webmanifest": "^2.8.3",
-    "parcel": "^2.8.3"
-  }
+    "@types/google-one-tap": "^1.2.2",
+    "animate.css": "^4.1.1",
+    "bulma-toast": "^2.4.2",
+    "idb": "^7.1.1",
+    "jose": "^4.13.1",
+    "parcel": "^2.8.3",
+    "parcel-reporter-static-files-copy": "^1.5.0",
+    "typed-query-selector": "^2.9.2",
+    "typescript": "^5.0.2"
+  },
+  "staticFiles": [
+    {
+      "staticPath": "_routes.json"
+    }
+  ]
 }

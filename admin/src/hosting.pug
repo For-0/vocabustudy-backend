@@ -1,0 +1,22 @@
+extends layout.pug
+block variables
+    - var title = "Hosting";
+    - var id = "hosting"
+block content
+    section.hero.welcome.is-small.box.p-0#welcome
+        .hero-body
+            .container
+                h1.title Firebase Hosting
+                h2.subtitle vocabustudy.org &#x2022; 
+                    a.icon-text.is-italic.is-size-7.has-text-white(style="vertical-align: middle;" href="https://console.firebase.google.com/project/vocab-u-study/hosting/sites" target="_blank")
+                        span Firebase Console
+                        span.icon #[i.fa-solid.fa-arrow-up-right-from-square]
+    .card
+        header.card-header
+            p.card-header-title Releases
+        .card-table
+            table.table.is-fullwidth.is-striped
+                tbody#releases-container
+        footer.card-footer
+            a.card-footer-item(href='https://console.firebase.google.com/project/vocab-u-study/hosting/sites/vocabustudyonline') View All
+    script(src="./scripts/hosting.ts" type="module")
