@@ -36,7 +36,8 @@ const baseJwtPayload = {
     auth_time: secondsSinceEpoch(-100).toString(),
     aud: process.env.GCP_PROJECT_ID,
     iss: `https://securetoken.google.com/${process.env.GCP_PROJECT_ID}`,
-    sub: "my-user-id"
+    sub: "my-user-id",
+    admin: true
 };
 
 describe("The API", () => {
@@ -87,6 +88,12 @@ describe("The API", () => {
         await axios.post(apiEndpoint`/api/stats`, { type: "self" }, await getAxiosConfig({
             ...baseJwtPayload,
             sub: undefined
+        }, 401));
+    });
+    it("Disallows requests that are not admin", async () => {
+        await axios.post(apiEndpoint`/api/stats`, { type: "self" }, await getAxiosConfig({
+            ...baseJwtPayload,
+            admin: undefined
         }, 401));
     });
     it("Disallows requests not signed correctly", async () => {

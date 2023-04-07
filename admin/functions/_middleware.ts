@@ -1,4 +1,4 @@
-import { decodeProtectedHeader, decodeJwt, jwtVerify, importX509, KeyLike } from "jose";
+import { decodeProtectedHeader, decodeJwt, jwtVerify, importX509, KeyLike, JWTVerifyResult } from "jose";
 import type { Env } from "../function-utils/common-types";
 import type { PagesFunction } from "@cloudflare/workers-types";
 
@@ -63,6 +63,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, next, env }) => {
     const [, idToken] = matched;
     let header = decodeProtectedHeader(idToken);
     let claimSet = decodeJwt(idToken);
+    console.log(header, claimSet)
     if (header.alg === "RS256" && header.kid in googlePublicKeys &&
         compareTokenDate(claimSet.exp, 1) &&
         compareTokenDate(claimSet.iat, -1) &&
@@ -73,7 +74,8 @@ export const onRequest: PagesFunction<Env> = async ({ request, next, env }) => {
     ) {
         let keySignedWith = googlePublicKeys[header.kid];
         try {
-            await jwtVerify(idToken, keySignedWith);
+            const { payload } = await jwtVerify(idToken, keySignedWith) as JWTVerifyResult;
+            if (payload.admin !== true) return unauthorized();
             return next();
         } catch {
             return unauthorized();

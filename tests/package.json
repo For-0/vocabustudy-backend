@@ -12,7 +12,7 @@
     },
     "scripts": {
         "setup-api-server": "cd ../ && npm run clean && npm -w admin run build",
-        "start-api-server": "CUSTOM_JWK=$(cat cert.pem) && cd ../ && && npm -w admin run dev -- --binding=\"CUSTOM_JWK='$CUSTOM_JWK'\"",
+        "start-api-server": "CUSTOM_JWK=$(cat cert.pem) && cd ../ && npm -w admin run dev -- --binding=\"CUSTOM_JWK='$CUSTOM_JWK'\"",
         "test": "mocha authentication.js"
     },
     "repository": {

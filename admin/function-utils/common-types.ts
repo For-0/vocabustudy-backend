@@ -1,3 +1,5 @@
+import { KVNamespace } from "@cloudflare/workers-types";
+
 export interface Release {
     id: string;
     hash: string;
