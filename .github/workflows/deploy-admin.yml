@@ -26,7 +26,7 @@ jobs:
         registry-url: https://npm.pkg.github.com/
     - env:
         NODE_AUTH_TOKEN: ${{ secrets.GPR_PAT }}
-      run: npm ci
+      run: npm ci -w admin
     - name: Build admin site with Parcel
       run: npm -w admin run build
     - name: Publish

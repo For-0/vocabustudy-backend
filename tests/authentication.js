@@ -1,6 +1,6 @@
 import { importPKCS8, SignJWT } from "jose";
 import { readFileSync } from "fs";
-import { describe, after, beforeEach, it, before } from "mocha";
+import { describe, it } from "mocha";
 import axios from "axios";
 
 const apiEndpoint = ([string]) => `http://127.0.0.1:1234${string}`;

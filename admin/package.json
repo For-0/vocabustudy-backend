@@ -38,7 +38,7 @@
   },
   "staticFiles": [
     {
-      "staticPath": "_routes.json"
+      "staticPath": "src/static"
     }
   ]
 }

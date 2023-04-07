@@ -1,5 +1,6 @@
 import { getToken, makeRequest } from "../../function-utils/google-auth";
-import { Env, Release } from "../../function-utils/common-types";
+import type { Env, Release } from "../../function-utils/common-types";
+import type { PagesFunction } from "@cloudflare/workers-types";
 
 interface RequestBody {
     type: "all" | "hosting" | "self";

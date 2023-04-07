@@ -1,5 +1,6 @@
 import { decodeProtectedHeader, decodeJwt, jwtVerify, importX509, KeyLike } from "jose";
-import { Env } from "../function-utils/common-types";
+import type { Env } from "../function-utils/common-types";
+import type { PagesFunction } from "@cloudflare/workers-types";
 
 const authorizationHeaderRegexp = /^Bearer ((?:[\w-]*\.){2}[\w-]*)$/;
 
