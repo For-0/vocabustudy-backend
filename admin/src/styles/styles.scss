@@ -110,7 +110,8 @@ a:hover {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #4f2b26;
 }
-#google-onetap-container > div > iframe {
+#google-onetap-container :is(iframe, [role=button]) {
+  /*! purgecss ignore current */
   margin-left: auto !important;
   margin-right: auto !important;
 }
