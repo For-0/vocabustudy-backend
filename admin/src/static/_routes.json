@@ -3,7 +3,8 @@
     "include": [
         "/api/stats",
         "/api/users",
-        "/api/users/modify"
+        "/api/users/modify",
+        "/api/rollback"
     ],
     "exclude": []
 }

@@ -1,6 +1,7 @@
 import { getToken, makeRequest } from "../../function-utils/google-auth";
-import type { Env, Release } from "../../function-utils/common-types";
+import type { Env } from "../../function-utils/common-types";
 import type { PagesFunction } from "@cloudflare/workers-types";
+import { parseRelease } from "../../function-utils/parse-release";
 
 interface RequestBody {
     type: "all" | "hosting" | "self";
@@ -96,11 +97,6 @@ async function countSets({ GCP_PROJECT_ID }: Env, authToken: string) {
     return parseInt(setsCount) as number;
 }
 
-const deploymentMethods = {
-    "cli-firebase--action-hosting-deploy": "GITHUB_ACTION",
-    "cli-firebase": "CLI"
-}
-
 async function getDetailedHostingStats(authToken: string) {
     const { releases } = await makeRequest(
         `https://firebasehosting.googleapis.com/v1beta1/sites/vocabustudyonline/channels/live/releases?pageSize=5`,
@@ -109,16 +105,7 @@ async function getDetailedHostingStats(authToken: string) {
         { method: "GET" }
     ) as { releases: any[] };
     if (!releases) throw new Error("Unable to fetch detailed release info");
-    return releases.map(release => ({
-        id: release.name.split("/").pop(),
-        hash: release.version.name.split("/").pop(),
-        deployedWith: deploymentMethods[release.version.labels["deployment-tool"]] || "UNKNOWN",
-        timestamp: Date.parse(release.releaseTime),
-        type: release.type,
-        user: release.releaseUser,
-        fileCount: parseInt(release.version.fileCount),
-        sizeBytes: parseInt(release.version.versionBytes)
-    } as Release))
+    return releases.map(parseRelease)
 }
 
 export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {

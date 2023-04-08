@@ -36,5 +36,6 @@ waitForReauth().then(async user => {
         stats.sets.innerText = sets.toString();
         stats.openForms.innerText = openForms.toString();
         stats.downloads.innerText = `${(downloads / (10 ** 6)).toFixed(2)} MB`;
+        Object.values(stats).forEach(el => el.parentElement?.classList.remove("has-loader"));
     }
 });

@@ -12,6 +12,7 @@ export interface Release {
     };
     fileCount: number;
     sizeBytes: number;
+    hasExpired: boolean;
 };
 
 export interface Env {
