@@ -2,7 +2,7 @@ import { openDB, DBSchema } from "idb";
 import { decodeJwt } from "jose";
 
 const requestUri = `${location.protocol}//${location.hostname}`;
-const API_KEY = "AIzaSyCsDuM2jx3ZqccS8MS5aumkOKaV2LiVwZk";
+export const API_KEY = "AIzaSyCsDuM2jx3ZqccS8MS5aumkOKaV2LiVwZk";
 
 export interface User {
     token: {

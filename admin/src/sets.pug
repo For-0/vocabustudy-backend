@@ -1,0 +1,88 @@
+extends layout.pug
+block variables
+    - var title = "Sets";
+    - var id = "sets"
+block content
+    section.hero.welcome.is-small.box.p-0#welcome
+        .hero-body
+            .container
+                h1.title Manage Sets
+                h2.subtitle insert cool description here
+    .columns
+        .column.is-6
+            .card
+                header.card-header
+                    .card-header-title.is-flex-wrap-wrap
+                        p Find by name
+                        p.card-header-subtitle Enter the exact name of the set
+                    span.card-header-icon
+                        span.tag.is-info name
+                .card-content
+                    .field.has-addons#search-by-name
+                        .control.has-icons-left.has-icons-right.is-expanded
+                            input.input.is-large(type='text' required)
+                            span.icon.is-medium.is-left
+                                i.fa.fa-language
+                        .control
+                            button.button.is-large
+                                i.fa.fa-search
+            .card
+                header.card-header
+                    .card-header-title.is-flex-wrap-wrap
+                        p Find by user ID
+                        p.card-header-subtitle Enter the 28 character ID
+                    span.card-header-icon
+                        span.tag.is-warning uid
+                .card-content
+                    .field.has-addons#search-by-uid
+                        .control.has-icons-left.is-expanded
+                            input.input.is-large(type='text' required maxlength=28 minlength=28)
+                            span.icon.is-medium.is-left
+                                i.fa.fa-user-tag
+                        .control
+                            button.button.is-large
+                                i.fa.fa-search
+        .column.is-6
+            .card
+                header.card-header
+                    .card-header-title.is-flex-wrap-wrap
+                        p Find by dynamic link
+                        p.card-header-subtitle Enter the four character code at the end of the link
+                    span.card-header-icon
+                        span.tag.is-success path
+                .card-content
+                    .field.has-addons#search-by-dynamic-link
+                        .control.has-icons-left.is-expanded
+                            input.input.is-large(type='text' required maxlength=4 minlength=4)
+                            span.icon.is-medium.is-left
+                                i.fa.fa-link
+                        .control
+                            button.button.is-large
+                                i.fa.fa-search
+            .card
+                header.card-header
+                    .card-header-title.is-flex-wrap-wrap
+                        p Find by ID
+                        p.card-header-subtitle Enter the 20 character ID
+                    span.card-header-icon
+                        span.tag.is-primary __name__
+                .card-content
+                    .field.has-addons#search-by-id
+                        .control.has-icons-left.is-expanded
+                            input.input.is-large(type='text' required maxlength=20 minlength=20)
+                            span.icon.is-medium.is-left
+                                i.fa.fa-fingerprint
+                        .control
+                            button.button.is-large
+                                i.fa.fa-search
+    script(src="./scripts/sets.ts" type="module")
+    #search-results-modal.modal
+        .modal-background
+        .modal-card.is-fullscreen
+            header.modal-card-head
+                p.modal-card-title Search Results
+                button.delete.action-close
+            section.modal-card-body
+                .list.has-overflow-ellipsis
+            footer.modal-card-foot
+                button.button.action-close Close

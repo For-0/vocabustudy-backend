@@ -3,8 +3,10 @@
 );
 @use "@bulvar/bulma/themes/light";
 @use "@for-0/bulvar-styles/src/bulvar-styles/dark-theme";
-@forward "@bulvar/bulma/sass/elements/image";
-@forward "@bulvar/bulma/sass/elements/table";
+@use "@bulvar/bulma/sass/elements/image";
+@use "@bulvar/bulma/sass/elements/table";
+@import "bulma-list/sass/bulma-list.sass";
+@import "@creativebulma/bulma-tooltip/src/sass";
 
 html, body {
   height: 100%;
@@ -48,9 +50,20 @@ nav.navbar {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.18);
   margin-bottom: 2rem;
 }
-.card-header-title {
+.card-header-subtitle {
   color: #8F99A3;
   font-weight: 400;
+}
+.card-header-title > p {
+    width: 100%;
+}
+.modal-card.is-fullscreen {
+    width: 100vw;
+    height: 100vh;
+    max-height: unset;
+    > .modal-card-head, > .modal-card-foot {
+        border-radius: 0;
+    }
 }
 .info-tiles {
   margin: 1rem 0;

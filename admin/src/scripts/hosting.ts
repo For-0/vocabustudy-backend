@@ -48,7 +48,7 @@ function createReleaseTableItem(release: Release, isCurrent: boolean) {
         .innerText = new Date(release.timestamp).toLocaleString();
     tableItem
         .appendChild(document.createElement("td"))
-        .innerText = `${release.fileCount} files • ${(release.sizeBytes / (10 ** 6)).toFixed(2)} MB`
+        .innerText = `${release.fileCount} files • ${(release.sizeBytes / (10 ** 3)).toFixed(2)} KB`
     tableItem.appendChild(document.createElement("td"))
         .innerText = deployedWithText;
     const rollbackCell = tableItem.appendChild(document.createElement("td"));

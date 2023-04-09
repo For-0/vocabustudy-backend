@@ -20,6 +20,7 @@ html
         link(rel='preconnect', href='https://fonts.gstatic.com', crossorigin='')
         link(href='https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,700&display=swap', rel='stylesheet')
         link(rel="manifest" href="app.webmanifest")
+        link(rel="stylesheet" href="npm:animate.css")
         block head
     body
         unless hideSidebar
@@ -47,7 +48,7 @@ html
                                 | General
                             ul.menu-list
                                 +sidebarLink("index", "Dashboard", "index.pug")
-                                +sidebarLink("sets", "Sets", "")
+                                +sidebarLink("sets", "Sets", "sets.pug")
                                 +sidebarLink("hosting", "Hosting", "hosting.pug")
                                 +sidebarLink("stats", "Statistics", "")
                             p.menu-label Administration

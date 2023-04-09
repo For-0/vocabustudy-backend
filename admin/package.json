@@ -20,6 +20,7 @@
   "license": "ISC",
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230321.0",
+    "@creativebulma/bulma-tooltip": "^1.2.0",
     "@for-0/bulvar-styles": "^1.0.1",
     "@fullhuman/postcss-purgecss": "^5.0.0",
     "@parcel/packager-raw-url": "^2.8.3",
@@ -28,7 +29,9 @@
     "@parcel/transformer-webmanifest": "^2.8.3",
     "@types/google-one-tap": "^1.2.2",
     "animate.css": "^4.1.1",
+    "bulma-list": "^1.2.0",
     "bulma-toast": "^2.4.2",
+    "i": "^0.3.7",
     "idb": "^7.1.1",
     "jose": "^4.13.1",
     "parcel": "^2.8.3",
