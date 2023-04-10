@@ -37,7 +37,7 @@ html
                             a.navbar-item(href='https://vocabustudy.org/') Stable
                             a.navbar-item(href='https://nightly.vocabustudy.org/') Nightly
                             a.navbar-item(href='https://blog.vocabustudy.org/') Blog
-        .container.is-fluid
+        main.container.is-fluid
             if hideSidebar
                 block content
             else
@@ -59,7 +59,7 @@ html
                                         li #[a Search Forms]
                                         li #[a Respond to Forms]
                                         li #[a Form Data]
-                                li #[a Manage Users]
+                                +sidebarLink("users", "Manage Users", "users.pug")
                                 +sidebarLink("bugs", "Bugs and Features", "", "This will replace the google sheet, and will directly transfer feature requests and bug reports to here if you click a button in Forms.")
                             p.menu-label
                                 | Posting
@@ -92,6 +92,11 @@ html
                                     a.has-text-danger(id="sidebar-logout" role="button") Log Out
                                         span.icon.is-small.ml-2
                                             i.fa-solid.fa-sign-out
-                    .column.is-9
+                    .column.is-9.is-flex.is-flex-direction-column
                         block content
-        block scripts
+        script.
+            // add a click listener to the burger menu
+            document.querySelector(".navbar-burger").addEventListener("click", () => {
+                document.querySelector(".navbar-burger").classList.toggle("is-active");
+                document.querySelector("#main-navbar").classList.toggle("is-active");
+            });

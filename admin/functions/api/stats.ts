@@ -143,14 +143,3 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
         return new Response(JSON.stringify({ response: "pong" }), { headers: { "Content-Type": "application/json" } });
     } else return new Response("Invalid field: type", { status: 400 });
 }
-
-export const onRequestGet: PagesFunction<Env> = async ({ request }) => {
-    const url = new URL(request.url);
-    if (url.searchParams.get("type") === "dynamic-link") {
-        if (!url.searchParams.get("path")) return new Response("Invalid field: link", { status: 400 });
-        const { url: longUrl, status } = await fetch(`https://set.vocabustudy.org/${url.searchParams.get("path")}`, { method: "HEAD" });
-        if (status === 404) return new Response("Not Found", { status: 404 });
-        const response = new Response(longUrl, { status: 200, headers: { "Content-Type": "text/plain" } });
-        return response;
-    }
-}

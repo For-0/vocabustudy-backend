@@ -1,0 +1,61 @@
+extends layout.pug
+block variables
+    - var title = "Manage Users";
+    - var id = "users"
+block content
+    section.hero.welcome.is-small.box.p-0#welcome
+        .hero-body
+            .container
+                h1.title Manage Users
+                h2.subtitle Queue the ban hammer
+    .columns
+        .column.is-6
+            .card.has-loader#users-card
+                header.card-header
+                    p.card-header-title All Users
+                .card-content
+                    .list
+                footer.card-footer
+                    a.card-footer-item.load-more(style="background-color: var(--card-background-color);") Load More
+                    a.card-footer-item(href='https://console.firebase.google.com/project/vocab-u-study/authentication/users') View All
+        .column.is-6
+            .card#user-card
+                header.card-header
+                    p.card-header-title User Details
+                .card-content
+                    section.no-user
+                        p No user selected
+                    section.user(hidden)
+                        .list-item.box.overview
+                            .list-item-image
+                                figure.image.is-48x48
+                                    img.is-rounded(alt="Profile Picture")
+                            .list-item-content
+                                p.list-item-title.is-flex.is-justify-content-space-between
+                                    span.display-name
+                                    span.tags
+                                p.list-item-description.email
+                        .buttons.actions
+                            button.button.toggle-admin
+                                span.icon
+                                    i.fas.fa-user-shield
+                                span
+                            button.button.verify-email.is-success.is-outlined
+                                span.icon
+                                    i.fas.fa-envelope
+                                span
+                            button.button.is-info.is-outlined.disable
+                                span.icon
+                                    i.fas.fa-user-slash
+                                span
+                            button.button.is-danger.is-outlined.delete-user
+                                span.icon
+                                    i.fas.fa-trash-can
+                                span Delete User
+                        p #[strong UID:] #[span.uid]
+                        p #[strong Created:] #[span.created]
+                        p #[strong Last Login:] #[span.last-login]
+                        p #[strong Auth Methods:] #[span.auth-methods]
+                footer.card-footer
+                    a.card-footer-item.copy-uid Copy UID
+    script(src="./scripts/users.ts" type="module")

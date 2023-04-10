@@ -1,7 +1,7 @@
 import "typed-query-selector";
 import { Release } from "../../function-utils/common-types";
 import { getCurrentUser } from "./local-db";
-import { waitForReauth } from "./require-authentication";
+import { getFreshUser, waitForReauth } from "./require-authentication";
 import { toast } from "bulma-toast";
 
 const releasesContainer = document.getElementById("releases-container");
@@ -66,8 +66,8 @@ function createReleaseTableItem(release: Release, isCurrent: boolean) {
         rollbackBtn.classList.add("is-warning");
         rollbackBtn.addEventListener("click", async () => {
             // rollback and refresh the releases list
-            const user = await getCurrentUser();
-            if (!user) return toast({ type: "is-warning", message: "Please reauthenticate" });
+            const user = await getFreshUser();
+            if (!user) return;
             rollbackBtn.disabled = true;
             rollbackBtn.classList.add("is-loading");
             try {

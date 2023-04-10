@@ -1,7 +1,7 @@
 import { getFreshUser, waitForReauth } from "./require-authentication";
 import { API_KEY } from "./local-db";
 import { FirestoreRestDocument, VocabSet } from "../../function-utils/common-types";
-import { parseMap } from "./firebase-rest-api-converters";
+import { getUserAvatar, parseMap } from "./utils";
 import { toast } from "bulma-toast";
 
 let userProfileCache = {};
@@ -59,20 +59,7 @@ async function displaySearchResults(sets: VocabSet[]) {
     for (const set of sets) {
         const listItem = searchResults.list.appendChild(document.createElement("div"));
         listItem.classList.add("list-item");
-        
-        const listItemImage = listItem.appendChild(document.createElement("div"));
-        listItemImage.classList.add("list-item-image");
-        const imageFigure = listItemImage.appendChild(document.createElement("figure"));
-        imageFigure.classList.add("image", "is-48x48", "has-tooltip-arrow", "has-tooltip-right", "is-clickable", "has-tooltip-info");
-        const image = imageFigure.appendChild(document.createElement("img"));
-        image.classList.add("is-rounded");
-        image.referrerPolicy = "no-referrer";
-        image.src = userProfiles[set.uid].photoUrl || new URL("../images/icon-192-maskable.png", import.meta.url).href;
-        imageFigure.dataset.tooltip = "Copy UID";
-        imageFigure.addEventListener("click", async () => {
-            await navigator.clipboard.writeText(set.uid);
-            toast({ message: "Copied to clipboard!", type: "is-success", animate: { in: "rubberBand", out: "backOutUp" }  })
-        });
+        listItem.appendChild(getUserAvatar(set.uid, userProfiles[set.uid].photoUrl));
 
         const listItemContent = listItem.appendChild(document.createElement("div"));
         listItemContent.classList.add("list-item-content");
@@ -203,22 +190,25 @@ const searchBy = {
             return await parseRunQueryResponse(res);
         }
     },
-    dynamicLink: {
-        input: document.querySelector("#search-by-dynamic-link input"),
-        button: document.querySelector("#search-by-dynamic-link button"),
-        async getSets(dynamicLink: string, accessToken: string) {
-            // evaluate the dynamic link to get the set id
-            const res = await fetch(`/api/stats?type=dynamic-link&path=${dynamicLink}`, {
+    recent: {
+        input: document.querySelector("#search-by-recent input"),
+        button: document.querySelector("#search-by-recent button"),
+        async getSets(numToFetch: string, accessToken: string) {
+            // query for all the sets created by the given user with the given uid
+            const res = await fetch(`${queryEndpoint}:runQuery?key=${API_KEY}`, {
+                method: "POST",
                 headers: {
+                    "Content-Type": "application/json",
                     Authorization: `Bearer ${accessToken}`
-                }
+                },
+                body: JSON.stringify({
+                    structuredQuery: {
+                        ...initialStructuredQuery,
+                        limit: parseInt(numToFetch)
+                    }
+                })
             });
-            if (!res.ok) return [];
-            const setUrl = await res.text();
-            const setId = setUrl.match(setUrlRegex)?.[1];
-            if (!setId) return [];
-            // then use use search by ID to get the set
-            return await searchBy.id.getSets(setId, accessToken);
+            return await parseRunQueryResponse(res);
         }
     },
     id: {

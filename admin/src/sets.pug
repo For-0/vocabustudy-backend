@@ -46,16 +46,16 @@ block content
             .card
                 header.card-header
                     .card-header-title.is-flex-wrap-wrap
-                        p Find by dynamic link
-                        p.card-header-subtitle Enter the four character code at the end of the link
+                        p Recently created
+                        p.card-header-subtitle Enter the number of sets to show
                     span.card-header-icon
-                        span.tag.is-success path
+                        span.tag.is-success creationTime
                 .card-content
-                    .field.has-addons#search-by-dynamic-link
+                    .field.has-addons#search-by-recent
                         .control.has-icons-left.is-expanded
-                            input.input.is-large(type='text' required maxlength=4 minlength=4)
+                            input.input.is-large(type='number' required max=20)
                             span.icon.is-medium.is-left
-                                i.fa.fa-link
+                                i.fa.fa-clock
                         .control
                             button.button.is-large
                                 i.fa.fa-search

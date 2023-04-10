@@ -54,3 +54,28 @@ export type VocabSet = {
     numTerms: number;
     visibility: number | string[];
 };
+
+export type User = {
+    displayName: string;
+    googleName?: string;
+    photoUrl?: string;
+    uid: string;
+    customAttributes: {
+        admin?: boolean;
+    };
+    createdAt: number;
+    lastLoginAt: number;
+    disabled: boolean;
+    emailVerified: boolean;
+    email: string;
+    providers: ("google.com" | "password")[]
+};
+
+export interface ModifyUserBody {
+    uid: string;
+    emailVerified?: boolean;
+    disabled?: boolean;
+    customAttributes?: {
+        admin?: boolean;
+    }
+};
