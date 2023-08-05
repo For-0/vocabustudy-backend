@@ -21,6 +21,7 @@ export interface Env {
     SERVICE_ACCOUNT_EMAIL: string;
     GCP_PROJECT_ID: string;
     CUSTOM_JWK?: string;
+    USE_FIREBASE_EMULATORS?: boolean;
 }
 
 /** This is a Partial of T intersected with a union of all possible subsets of T */

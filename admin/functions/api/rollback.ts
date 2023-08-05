@@ -1,5 +1,5 @@
-import { Env } from "../../function-utils/common-types";
-import { getToken, makeRequest } from "../../function-utils/google-auth";
+import { Env } from "function-utils/common-types";
+import { getToken, makeRequest } from "function-utils/google-auth";
 
 interface RequestBody {
     versionHash: string;

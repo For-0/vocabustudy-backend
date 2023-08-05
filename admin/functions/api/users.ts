@@ -1,5 +1,5 @@
-import { getToken, makeRequest } from "../../function-utils/google-auth";
-import { Env, ModifyUserBody, User } from "../../function-utils/common-types";
+import { getToken, makeRequest } from "function-utils/google-auth";
+import { Env, ModifyUserBody, User } from "function-utils/common-types";
 import type { PagesFunction } from "@cloudflare/workers-types";
 
 async function listUsers({ GCP_PROJECT_ID }: Env, authToken: string, page = 0) {

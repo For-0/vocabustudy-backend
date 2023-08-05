@@ -5,7 +5,8 @@
   "workspaces": [
     "admin/",
     "backend/",
-    "tests/"
+    "tests/",
+    "function-utils/"
   ],
   "keywords": [],
   "author": "Vocabustudy Developers",
