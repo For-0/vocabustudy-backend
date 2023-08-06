@@ -1,4 +1,4 @@
-name = "backend"
+name = "vocabustudy-backend"
 main = "src/worker.ts"
 compatibility_date = "2023-07-24"
 
@@ -49,3 +49,7 @@ compatibility_date = "2023-07-24"
 # [[migrations]]
 # tag = "v1"
 # new_classes = ["MyDurableObject"]
+
+routes = [
+    { pattern = "api.vocabustudy.org", custom_domain = true }
+]

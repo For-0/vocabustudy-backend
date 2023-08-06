@@ -1,8 +1,25 @@
 import { verifyAndExtractJwt } from "function-utils/firebase-jwt";
 import { getToken } from "function-utils/google-auth"
 import type { Env } from "function-utils/common-types";
+import { getHelperForm, getHelperFormSubmitResponse } from "./discord-interaction-response";
 
 const unauthorized = () => new Response("Unauthorized", { status: 401 });
+const discordPublicKey = await crypto.subtle.importKey(
+    "raw",
+    Uint8Array.from([196,96,212,160,198,163,66,168,136,92,222,174,133,204,61,169,47,2,200,184,138,10,121,213,225,234,36,177,219,14,78,170]),
+    "Ed25519",
+    false,
+    ["verify"]
+);
+
+function respondJson(json: object) {
+    return new Response(JSON.stringify(json), {
+        headers: {
+            "Content-Type": "application/json"
+        },
+        status: 200
+    });
+}
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -51,6 +68,26 @@ export default {
                 if (!deleteResponse.ok) return new Response("Failed to delete", { status: 500 });
                 console.debug("Deleted set and socials");
                 return new Response("Deleted", { status: 200 });
+            }
+            case '/discord-interaction/': {
+                if (request.method !== "POST") return new Response("Invalid method", { status: 405 });
+                const body = await request.text();
+                const signature = request.headers.get("X-Signature-Ed25519");
+                const timestamp = request.headers.get("X-Signature-Timestamp");
+                if (!signature || !timestamp) return new Response("Missing signature or timestamp", { status: 401 });
+                const signatureBytes = signature.match(/[\da-f]{2}/gi);
+                if (!signatureBytes) return new Response("Invalid signature", { status: 401 });
+                const isVerified = await crypto.subtle.verify(
+                    { name: "Ed25519" },
+                    discordPublicKey,
+                    Uint8Array.from(signatureBytes, h => parseInt(h, 16)),
+                    new TextEncoder().encode(timestamp + body)
+                );
+                if (!isVerified) return new Response("Invalid signature", { status: 401 });
+                const { member, type, data } = JSON.parse(body);
+                if (type === 1) return respondJson({ type: 1 });
+                else if (type === 2 && data.name === "helperform") return respondJson(await getHelperForm(member, env));
+                else if (type === 5 && data.custom_id === "helper_application_modal") return respondJson(await getHelperFormSubmitResponse(member, data, env));
             }
             default:
                 return new Response('404 Not Found', { status: 404 });

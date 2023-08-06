@@ -11,7 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  deploy-admin-portal:
+    if: false
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -38,3 +39,24 @@ jobs:
         directory: dist
         gitHubToken: ${{ secrets.GITHUB_TOKEN }}
         workingDirectory: admin
+  deploy-workers:
+    if: false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js 18
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'npm'
+    - run: npm ci -w backend
+    - name: Publish
+      uses: cloudflare/wrangler-action@2.0.0
+      with:
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        workingDirectory: backend
+        command: deploy
