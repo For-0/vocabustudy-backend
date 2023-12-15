@@ -1,9 +1,9 @@
-import { verifyAndExtractJwt } from "function-utils/firebase-jwt";
-import { getToken } from "function-utils/google-auth"
+//import { verifyAndExtractJwt } from "function-utils/firebase-jwt";
+//import { getToken } from "function-utils/google-auth"
 import type { Env } from "function-utils/common-types";
 import { getHelperForm, getHelperFormSubmitResponse } from "./discord-interaction-response";
 
-const unauthorized = () => new Response("Unauthorized", { status: 401 });
+//const unauthorized = () => new Response("Unauthorized", { status: 401 });
 const discordPublicKey = await crypto.subtle.importKey(
     "raw",
     Uint8Array.from([196,96,212,160,198,163,66,168,136,92,222,174,133,204,61,169,47,2,200,184,138,10,121,213,225,234,36,177,219,14,78,170]),
@@ -25,7 +25,7 @@ export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
         const url = new URL(request.url);
         switch (url.pathname) {
-            case '/delete-set/': {
+            /*case '/delete-set/': {
                 if (request.method === "OPTIONS" && ["https://vocabustudy.org", "http://localhost:5173"].includes(request.headers.get("Origin") as string)) return new Response(null, { status: 204, headers: { "Access-Control-Allow-Origin": request.headers.get("Origin") as string } });
                 if (request.method !== "POST") return new Response("Invalid method", { status: 405 });
 
@@ -68,7 +68,7 @@ export default {
                 if (!deleteResponse.ok) return new Response("Failed to delete", { status: 500 });
                 console.debug("Deleted set and socials");
                 return new Response("Deleted", { status: 200 });
-            }
+            }*/
             case '/discord-interaction/': {
                 if (request.method !== "POST") return new Response("Invalid method", { status: 405 });
                 const body = await request.text();
