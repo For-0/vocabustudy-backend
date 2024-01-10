@@ -23,6 +23,7 @@ export interface Env {
     CUSTOM_JWK?: string;
     USE_FIREBASE_EMULATORS?: boolean;
     DISCORD_BOT_TOKEN: string;
+    GH_WEBHOOK_SECRET: string;
 }
 
 /** This is a Partial of T intersected with a union of all possible subsets of T */
