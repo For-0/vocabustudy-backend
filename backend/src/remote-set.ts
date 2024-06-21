@@ -1,9 +1,11 @@
-export const kahootCreateUrl = /^https:\/\/create.kahoot.it\/details\/([0-9a-zA-Z-]+)$/;
+export const kahootCreateUrl = /^https:\/\/create.kahoot.it\/details\/([\w-]+)\/?$/;
+export const kahootChallengeUrl = /^https:\/\/kahoot.it\/challenge\/([\w-]+)\/?$/;
 
 type KahootContent = {
     type: "content",
     title: string,
-    description: string
+    description: string,
+    image?: string
 };
 
 type KahootQuestion = {
@@ -17,21 +19,19 @@ type KahootQuestion = {
     }[]
 };
 
-interface KahootCreateResponse {
-    kahoot: {
-        uuid: string,
-        creator: string, // id
-        creator_username: string,
-        title: string,
-        description: string,
-        quizType: string,
-        cover: string,
-        created: number,
-        modified: number,
-        type: string,
-        questions: (KahootContent | KahootQuestion)[]
-    }
-}
+interface Kahoot {
+    uuid: string,
+    creator: string, // id
+    creator_username: string,
+    title: string,
+    description: string,
+    quizType: string,
+    cover: string,
+    created: number,
+    modified: number,
+    type: string,
+    questions: (KahootContent | KahootQuestion)[]
+};
 
 interface StudyGuideQuiz {
     questions: StudyGuideQuizQuestion[],
@@ -66,8 +66,19 @@ interface VocabustudyStudyGuide {
     creationTime: Date;
 }
 
+interface UserProfile {
+    displayName: string,
+    photoUrl: string,
+    uid: string,
+    roles: string[]
+}
+
+function imageWithText(text: string, image?: string) {
+    return image ? `${text}\n\n![image](${image})` : text;
+}
+
 function parseKahootQuestion(question: KahootQuestion): StudyGuideQuizQuestion | undefined {
-    const richQuestion = question.image ? `${question.question}\n\n![image](${question.image})` : question.question;
+    const richQuestion = imageWithText(question.question, question.image);
 
     if (question.type === "open_ended") {
         return {
@@ -89,18 +100,15 @@ function parseKahootQuestion(question: KahootQuestion): StudyGuideQuizQuestion |
     }
 }
 
-export async function parseKahootCreate(setId: string): Promise<VocabustudyStudyGuide> {
-    const res = await fetch(`https://create.kahoot.it/rest/kahoots/${setId}/card/?includeKahoot=true`);
-    const { kahoot } = await res.json<KahootCreateResponse>();
+function parseKahootContent(content: KahootContent): StudyGuideReading {
+    return { type: 0, title: content.title, body: imageWithText(content.description, content.image) };
+}
 
-    const richDescription = `${kahoot.description}
-
-![cover](${kahoot.cover})`;
-
+function parseKahoot(kahoot: Kahoot) {
     // we join consecutive questions into one study guide quiz
     const questions = kahoot.questions.reduce((acc, cur, idx) => {
         // content always goes on its own page
-        if (cur.type === "content") acc.push({ type: 0, title: cur.title, body: cur.description });
+        if (cur.type === "content") acc.push(parseKahootContent(cur));
         else {
             const parsedQuestion = parseKahootQuestion(cur);
             // couldn't parse the question
@@ -121,11 +129,10 @@ export async function parseKahootCreate(setId: string): Promise<VocabustudyStudy
         return acc;
     }, [] as (StudyGuideQuiz | StudyGuideReading)[]);
 
-    return {
+    const set = {
         name: kahoot.title,
-        description: richDescription,
-        // check what this is about
-        uid: kahoot.creator_username,
+        description: imageWithText(kahoot.description, kahoot.cover),
+        uid: kahoot.creator,
         visibility: 2, // public
         // study guide
         collections: ["-:1"],
@@ -136,4 +143,29 @@ export async function parseKahootCreate(setId: string): Promise<VocabustudyStudy
         terms: questions,
         numTerms: questions.length
     };
+
+    const creator = {
+        displayName: kahoot.creator_username,
+        photoUrl: "",
+        roles: [],
+        uid: kahoot.creator
+    };
+
+    return { set, creator };
+}
+
+export async function parseKahootCreate(setId: string): Promise<{ set: VocabustudyStudyGuide; creator: UserProfile } | null> {
+    const res = await fetch(`https://create.kahoot.it/rest/kahoots/${setId}/card/?includeKahoot=true`);
+    if (!res.ok) return null;
+    const { kahoot } = await res.json<{ kahoot: Kahoot }>();
+    if (!kahoot) return null;
+    return parseKahoot(kahoot);
+}
+
+export async function parseKahootChallenge(challengeId: string): Promise<{ set: VocabustudyStudyGuide; creator: UserProfile } | null> {
+    const res = await fetch(`https://kahoot.it/rest/challenges/${challengeId}/answers`);
+    if (!res.ok) return null;
+    const { challenge } = await res.json<{ challenge: { kahoot: Kahoot }}>();
+    if (!challenge?.kahoot) return null;
+    return parseKahoot(challenge.kahoot);
 }

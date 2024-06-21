@@ -2,7 +2,7 @@
 //import { getToken } from "function-utils/google-auth"
 import type { Env } from "function-utils/common-types";
 import { getHelperForm, getHelperFormSubmitResponse } from "./discord-interaction-response";
-import { kahootCreateUrl, parseKahootCreate } from "./remote-set";
+import { kahootChallengeUrl, kahootCreateUrl, parseKahootChallenge, parseKahootCreate } from "./remote-set";
 
 //const unauthorized = () => new Response("Unauthorized", { status: 401 });
 const discordPublicKey = await crypto.subtle.importKey(
@@ -54,7 +54,19 @@ export default {
 
                 const kahootCreateMatch = url.match(kahootCreateUrl);
                 if (kahootCreateMatch) {
-                    return respondJson(await parseKahootCreate(kahootCreateMatch[1]));
+                    const kahoot = await parseKahootCreate(kahootCreateMatch[1]);
+                    if (kahoot)
+                        return respondJson(kahoot);
+                    else
+                        return new Response("Not found", { status: 404 });
+                }
+                const kahootChallengeMatch = url.match(kahootChallengeUrl);
+                if (kahootChallengeMatch) {
+                    const kahoot = await parseKahootChallenge(kahootChallengeMatch[1]);
+                    if (kahoot)
+                        return respondJson(kahoot);
+                    else
+                        return new Response("Not found", { status: 404 });
                 }
                 
                 return new Response("Unknown url format", { status: 400 });
