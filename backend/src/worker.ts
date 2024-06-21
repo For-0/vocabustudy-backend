@@ -47,15 +47,17 @@ export default {
                 else if (type === 5 && data.custom_id === "helper_application_modal") return respondJson(await getHelperFormSubmitResponse(member, data, env));
             }
             case "/import-remote-set/": {
-                const url = request.headers.get("url");
-                if (!url) return new Response("Missing url", { status: 401 });
+                if (request.method !== "POST") return new Response("Invalid method", { status: 405 });
+                
+                const { url } = await request.json<{ url: string; }>();
+                if (!url || typeof url !== "string") return new Response("Missing url", { status: 400 });
 
                 const kahootCreateMatch = url.match(kahootCreateUrl);
                 if (kahootCreateMatch) {
                     return respondJson(await parseKahootCreate(kahootCreateMatch[1]));
                 }
                 
-                return new Response("Unknown url format", { status: 401 });
+                return new Response("Unknown url format", { status: 400 });
             }
             case "/gh-webhook/": {
                 if (request.method !== "POST") return new Response("Invalid method", { status: 405 });
