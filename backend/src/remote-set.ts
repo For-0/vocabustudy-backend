@@ -1,6 +1,8 @@
-export const kahootCreateUrl = /^https:\/\/create.kahoot.it\/details\/([\w-]+)\/?$/;
-export const kahootChallengeUrl = /^https:\/\/kahoot.it\/challenge\/(?<id>[\w-]+)\/?$/;
-export const kahootChallengeUrl2 = /^https:\/\/kahoot.it\/challenge\/\d+\?challenge-id=(?<id>[\w-]+)$/;
+export const kahootCreateUrl = /^https:\/\/create\.kahoot\.it\/details\/([\w-]+)\/?$/;
+export const kahootChallengeUrl = /^https:\/\/kahoot\.it\/challenge\/(?<id>[\w-]+)\/?$/;
+export const kahootChallengeUrl2 = /^https:\/\/kahoot\.it\/challenge\/\d+\?challenge-id=(?<id>[\w-]+)$/;
+
+export const quizizzAdminUrl = /^https:\/\/quizizz\.com\/admin\/quiz\/(\w+)\/?/;
 
 type KahootContent = {
     type: "content",
@@ -33,6 +35,39 @@ interface Kahoot {
     type: string,
     questions: (KahootContent | KahootQuestion)[]
 };
+
+interface QuizizzMedia { type: string; url: string; };
+
+interface QuizizzQuestion {
+    structure: {
+        query: {
+            text: string;
+            media: QuizizzMedia[]
+        };
+        options: {
+            type: "text";
+            text: string;
+            media: QuizizzMedia[];
+        }[];
+        answer: number;
+        kind: "MCQ";
+    }
+}
+
+interface Quizizz {
+    createdBy: {
+        id: string;
+        firstName: string;
+        lastName: string;
+        media?: string;
+    };
+    createdAt: string;
+    info: {
+        questions: QuizizzQuestion[];
+        name: string;
+        image: string;
+    }
+}
 
 interface StudyGuideQuiz {
     questions: StudyGuideQuizQuestion[],
@@ -169,4 +204,33 @@ export async function parseKahootChallenge(challengeId: string): Promise<{ set: 
     const { challenge } = await res.json<{ challenge: { kahoot: Kahoot }}>();
     if (!challenge?.kahoot) return null;
     return parseKahoot(challenge.kahoot);
+}
+
+export async function parseQuizizzAdmin(quizId: string): Promise<{ set: VocabustudyStudyGuide; creator: UserProfile } | null> {
+    const res = await fetch(`https://quizizz.com/_quizserver/main/v2/quiz/${quizId}?convertQuestions=false&sanitize=read&questionMetadata=false`);
+    if (!res.ok) return null;
+    const { data: { quiz } } = await res.json<{ data: { quiz: Quizizz } }>();
+
+    return {
+        creator: {
+            displayName: `${quiz.createdBy.firstName} ${quiz.createdBy.lastName}`,
+            photoUrl: quiz.createdBy.media ?? "",
+            roles: [],
+            uid: quiz.createdBy.id
+        },
+        set: {
+            name: quiz.info.name,
+            description: imageWithText("", quiz.info.image),
+            uid: quiz.createdBy.id,
+            visibility: 2, // public
+            // study guide
+            collections: ["-:1"],
+            likes: [],
+            comments: {},
+            nameWords: [],
+            creationTime: new Date(quiz.createdAt),
+            terms: questions,
+            numTerms: questions.length
+        }
+    };
 }
