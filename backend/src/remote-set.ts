@@ -206,10 +206,24 @@ export async function parseKahootChallenge(challengeId: string): Promise<{ set: 
     return parseKahoot(challenge.kahoot);
 }
 
+function parseQuizizzMedia(media: QuizizzMedia[]) {
+    return media.find(el => el.type === "image")?.url;
+}
+
 export async function parseQuizizzAdmin(quizId: string): Promise<{ set: VocabustudyStudyGuide; creator: UserProfile } | null> {
-    const res = await fetch(`https://quizizz.com/_quizserver/main/v2/quiz/${quizId}?convertQuestions=false&sanitize=read&questionMetadata=false`);
+    const res = await fetch(`https://quizizz.com/_quizserver/main/v2/quiz/${quizId}?convertQuestions=false&sanitize=read&questionMetadata=false`, { headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0" } });
     if (!res.ok) return null;
     const { data: { quiz } } = await res.json<{ data: { quiz: Quizizz } }>();
+
+    // we only support MCQs for now
+    const questions: StudyGuideQuizQuestion[] = quiz.info.questions.filter(el => el.structure.kind === "MCQ").map(({ structure: { query, answer, options } }) => {
+        return {
+            type: 0,
+            question: imageWithText(query.text, parseQuizizzMedia(query.media)),
+            correct: [answer],
+            answers: options.filter(el => el.type === "text").map(item => imageWithText(item.text, parseQuizizzMedia(item.media))),
+        };
+    });
 
     return {
         creator: {
@@ -229,8 +243,12 @@ export async function parseQuizizzAdmin(quizId: string): Promise<{ set: Vocabust
             comments: {},
             nameWords: [],
             creationTime: new Date(quiz.createdAt),
-            terms: questions,
-            numTerms: questions.length
+            numTerms: 1,
+            terms: [{
+                type: 1,
+                title: "Questions",
+                questions
+            }]
         }
     };
 }
