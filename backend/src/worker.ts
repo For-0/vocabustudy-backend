@@ -2,7 +2,7 @@
 //import { getToken } from "function-utils/google-auth"
 import type { Env } from "function-utils/common-types";
 import { getHelperForm, getHelperFormSubmitResponse } from "./discord-interaction-response";
-import { kahootChallengeUrl, kahootCreateUrl, parseKahootChallenge, parseKahootCreate } from "./remote-set";
+import { kahootChallengeUrl, kahootChallengeUrl2, kahootCreateUrl, parseKahootChallenge, parseKahootCreate } from "./remote-set";
 
 //const unauthorized = () => new Response("Unauthorized", { status: 401 });
 const discordPublicKey = await crypto.subtle.importKey(
@@ -60,7 +60,7 @@ export default {
                     else
                         return new Response("Not found", { status: 404 });
                 }
-                const kahootChallengeMatch = url.match(kahootChallengeUrl);
+                const kahootChallengeMatch = url.match(kahootChallengeUrl) ?? url.match(kahootChallengeUrl2);
                 if (kahootChallengeMatch) {
                     const kahoot = await parseKahootChallenge(kahootChallengeMatch[1]);
                     if (kahoot)

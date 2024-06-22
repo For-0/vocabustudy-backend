@@ -1,5 +1,6 @@
 export const kahootCreateUrl = /^https:\/\/create.kahoot.it\/details\/([\w-]+)\/?$/;
-export const kahootChallengeUrl = /^https:\/\/kahoot.it\/challenge\/([\w-]+)\/?$/;
+export const kahootChallengeUrl = /^https:\/\/kahoot.it\/challenge\/(?<id>[\w-]+)\/?$/;
+export const kahootChallengeUrl2 = /^https:\/\/kahoot.it\/challenge\/\d+\?challenge-id=(?<id>[\w-]+)$/;
 
 type KahootContent = {
     type: "content",
