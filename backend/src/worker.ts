@@ -13,10 +13,13 @@ const discordPublicKey = await crypto.subtle.importKey(
     ["verify"]
 );
 
-function respondJson(json: object) {
+const corsOrigins = new Set(["http://localhost:5173", "https://vocabustudy.org"]);
+
+function respondJson(json: object, extraHeaders?: Record<string, string>) {
     return new Response(JSON.stringify(json), {
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            ...extraHeaders
         },
         status: 200
     });
@@ -47,6 +50,19 @@ export default {
                 else if (type === 5 && data.custom_id === "helper_application_modal") return respondJson(await getHelperFormSubmitResponse(member, data, env));
             }
             case "/import-remote-set/": {
+                // cors preflight
+                const origin = request.headers.get("origin");
+                const corsHeaders = origin && corsOrigins.has(origin) ? {
+                    "Access-Control-Allow-Origin": origin,
+                    "Access-Control-Allow-Headers": "authorization,content-type"
+                } : undefined;
+                if (request.method === "OPTIONS" && corsHeaders) {
+                    return new Response(null, {
+                        status: 204,
+                        headers: corsHeaders
+                    });
+                }
+
                 if (request.method !== "POST") return new Response("Invalid method", { status: 405 });
                 
                 const { url } = await request.json<{ url: string; }>();
@@ -56,7 +72,7 @@ export default {
                 if (kahootCreateMatch) {
                     const kahoot = await parseKahootCreate(kahootCreateMatch[1]);
                     if (kahoot)
-                        return respondJson(kahoot);
+                        return respondJson(kahoot, corsHeaders);
                     else
                         return new Response("Not found", { status: 404 });
                 }
@@ -64,7 +80,7 @@ export default {
                 if (kahootChallengeMatch) {
                     const kahoot = await parseKahootChallenge(kahootChallengeMatch[1]);
                     if (kahoot)
-                        return respondJson(kahoot);
+                        return respondJson(kahoot, corsHeaders);
                     else
                         return new Response("Not found", { status: 404 });
                 }
@@ -72,7 +88,7 @@ export default {
                 if (quizizzAdminMatch) {
                     const quizizz = await parseQuizizzAdmin(quizizzAdminMatch[1]);
                     if (quizizz)
-                        return respondJson(quizizz);
+                        return respondJson(quizizz, corsHeaders);
                     else
                         return new Response("Not found", { status: 404 });
                 }
